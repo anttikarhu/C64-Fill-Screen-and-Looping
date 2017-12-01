@@ -1,0 +1,29 @@
+; ALLOWS ONE TO START THE APPLICATION WITH RUN
+; SYS 2064
+*=$0801 
+         BYTE $0C, $8, $0A, $00, $9E, $20, $32, $30, $36, $34, $00, $00, $00, $00, $00
+
+INIT    
+        LDA #$00        ; SPECIFY ADDRESS WHERE TO WRITE CHARACTERS, STARTING FROM $0400 (DEFAULT SCREEN MEMORY)
+        STA $FA
+        LDA #$04
+        STA $FB
+
+        LDA #1          ; WHAT CHARACTER TO WRITE (1 = A)
+        LDY #0          ; INIT Y COUNTER
+
+WRLOOP 
+        STA ($FA),Y     ; STORE ACCUMULATOR VALUE (1) TO ADDRESS (*FB x (*FA + Y)), FOR EXAMPLE TO $0405 IF FB=04, FB=00 AND Y=05
+        INY             ; INCREMENT COUNTER
+        BNE WRLOOP      ; LOOP UNTIL Y OVERFLOWS TO ZERO (AND IS TIME TO INCREMENT X)
+
+        LDX $FB         ; INCREMENT $FB VALUE BY 1
+        INX
+        STX $FB
+
+        CPX #8          ; LOOP UNTIL X IS 8 (SCREEN SIZE = 256 * 8)
+        BNE WRLOOP
+
+
+        ; MAIN LOOP
+LOOP    JMP LOOP
