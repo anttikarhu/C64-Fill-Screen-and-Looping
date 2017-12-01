@@ -21,7 +21,7 @@ WRLOOP
         INX
         STX $FB
 
-        CPX #8          ; LOOP UNTIL X IS 8 (SCREEN SIZE = 256 * 8)
+        CPX #$08        ; LOOP UNTIL X IS AT ADDRESS $08 (NOT IN SCREEN MEMORY ANY MORE)
         BNE WRLOOP
 
 
